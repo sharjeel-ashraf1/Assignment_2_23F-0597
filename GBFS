@@ -1,0 +1,26 @@
+Greddy Best First Search
+def gbfs(grid,start,goal,hfn):
+    rows,cols=len(grid),len(grid[0])
+
+    frontier=PriorityQueue()
+    frontier.push(hfn(start,goal),start)
+
+    came={}
+    visited=set()
+
+    while not frontier.empty():
+        cur=frontier.pop()
+        visited.add(cur)
+
+        if cur==goal:
+            return reconstruct_path(came,start,goal),visited,frontier.as_list()
+
+        for nb in neighbors(cur,rows,cols):
+            if grid[nb[0]][nb[1]]==1:
+                continue
+
+            if nb not in visited and nb not in came:
+                came[nb]=cur
+                frontier.push(hfn(nb,goal),nb)
+
+    return [],visited,frontier.as_list()
